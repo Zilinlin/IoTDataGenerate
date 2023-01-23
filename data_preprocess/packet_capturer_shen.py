@@ -2,12 +2,21 @@
 
 import dpkt
 from packet import Packet
+import logging
+import socket
+
 
 class PacketCapturer:
     def __init__(self,label,file_name):
         self.label = label
         self.packets=[]
         self.file_name = file_name
+
+    def inet_to_str(addr):
+        try:
+            return socket.inet_ntop(socket.AF_INET, addr)
+        except:
+            return socket.inet_ntop(socket.AF_INET6, addr)
 
     # this function can transfer the pacp file to the list of packets
     def pcap2packets(self):
@@ -23,17 +32,19 @@ class PacketCapturer:
 
             if not isinstance(ether.data, dpkt.ip.IP):
                 logging.debug("Non IP Packet type not supported {} ".format(ether.data.__class__.__name__))
+                break
             length = len(buf)
             ip = ether.data
-            df = bool(ip.off & dpkt.ip.IP_DF)
-            mf = bool(ip.off & dpkt.ip.IP_MF)
-            offset = bool(ip.off & dpkt.ip.IP_OFFMASK)
+            #print("type of ip", type(ip))
+            #df = bool(ip.off & dpkt.ip.IP_DF)
+            #mf = bool(ip.off & dpkt.ip.IP_MF)
+            #offset = bool(ip.off & dpkt.ip.IP_OFFMASK)
 
             protocol = ip.p
             trans = None
 
             if protocol == 1:
-                logging.debug("ICMP: {} -> {}".format(inet_to_str(ip.src), inet_to_str(ip.dst)))
+                logging.debug("ICMP: {} -> {}".format(PacketCapturer.net_to_str(ip.src), PacketCapturer.inet_to_str(ip.dst)))
 
             elif protocol == 6:
                 if not isinstance(ip.data,dpkt.tcp.TCP):
@@ -41,7 +52,7 @@ class PacketCapturer:
                 tcp = ip.data
                 sport = tcp.sport
                 dport = tcp.dport
-                logging.debug("TCP/IP: {}:{} -> {}:{} (len={})".format(inet_to_str(ip.src),sport,inet_to_str(ip.dst),dport, ip.len))
+                logging.debug("TCP/IP: {}:{} -> {}:{} (len={})".format(PacketCapturer.inet_to_str(ip.src),sport,PacketCapturer.inet_to_str(ip.dst),dport, ip.len))
                 trans = tcp
             elif protocol == 17:
                 if not isinstance(ip.data, dpkt.udp.UDP):
@@ -49,7 +60,7 @@ class PacketCapturer:
                 udp = ip.data
                 sport = udp.sport
                 dport = udp.dport
-                logging.debug("UD/IP: {}:{} -> {}:{} (len = {})".format(inet_to_str(ip.src),sport, inet_to_str(ip.dst),dport,ip.len))
+                logging.debug("UDP/IP: {}:{} -> {}:{} (len = {})".format(PacketCapturer.inet_to_str(ip.src),sport, PacketCapturer.inet_to_str(ip.dst),dport,ip.len))
                 trans = udp
             else:
                 logging.error("Not supported protocol")
