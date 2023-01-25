@@ -28,7 +28,7 @@ class Window:
     def pkt_ifin_flow(self,flow,pkt):
         protocol, saddr, sport, daddr, dport = pkt.get_each_flow_info()
 
-        if flow.get_protocol() == protocol and flow.get_saddr() = saddr and flow.get_sport() == sport and flow.get_daddr() = daddr and flow.get_dport() = dport:
+        if flow.get_protocol() == protocol and flow.get_saddr() == saddr and flow.get_sport() == sport and flow.get_daddr() == daddr and flow.get_dport() == dport:
             return True
         else:
             return False
@@ -36,9 +36,9 @@ class Window:
     def add_packet(self, pkt):
         protocol, saddr, sport, daddr, dport = pkt.get_each_flow_info()
 
-        if Window.pkt_ifin_flow(self.flow["forward"],pkt):
+        if self.pkt_ifin_flow(self.flow["forward"],pkt):
             self.packets["forward"].append(pkt)
-        elif Window.pkt_ifin_flow(self.flow["backward"], pkt):
+        elif self.pkt_ifin_flow(self.flow["backward"], pkt):
             self.packets["backward"].append(pkt)
 
         if pkt.get_label() ==1:
@@ -64,11 +64,14 @@ class Window:
         self.window_start_time = start_time
         self.widow_end_time = end_time
 
+    def get_flow(self,direction):
+        return self.flow[direction]
+
     def is_corresponding_flow(self,window):
         b1 = self.flow["backward"]
         f1 = self.flow["forward"]
-        b2 = self.flow["backward"]
-        f2 = self.flow["forward"]
+        b2 = window.get_flow("backward")
+        f2 = window.get_flow("forward")
 
         ret1 = b1.is_corresponding_flow(b2)
         ret2 = b1.is_corresponding_flow(f2)
@@ -77,6 +80,10 @@ class Window:
 
         return ret1 or ret2 or ret3 or ret4
 
-
+    def get_label(self,kind=None):
+        if kind:
+            return self.label[kind]
+        else:
+            return self.label
 
 

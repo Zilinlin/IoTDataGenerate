@@ -48,7 +48,8 @@ class PacketCapturer:
 
             elif protocol == 6:
                 if not isinstance(ip.data,dpkt.tcp.TCP):
-                    return None
+                    print("None")
+                    #return None
                 tcp = ip.data
                 sport = tcp.sport
                 dport = tcp.dport
@@ -56,7 +57,8 @@ class PacketCapturer:
                 trans = tcp
             elif protocol == 17:
                 if not isinstance(ip.data, dpkt.udp.UDP):
-                    return None
+                    #return None
+                    print("None")
                 udp = ip.data
                 sport = udp.sport
                 dport = udp.dport
@@ -64,7 +66,8 @@ class PacketCapturer:
                 trans = udp
             else:
                 logging.error("Not supported protocol")
-                return None
+                #return None
+                print("None")
             # TODO: header is not finished
             # the original code use pcap_pkthdr in libpcap/winpcap
             # just use empty thing as header
