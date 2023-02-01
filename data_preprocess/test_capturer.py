@@ -5,7 +5,7 @@ from window_manager import WindowManager
 from feature_extractor import FeatureExtractor
 from numpy_generator import NumpyGenerator
 from label_packet import generate_label_data, label_packets
-
+from lstm import LSTM
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
 test_dataset_name = "../set_1/test_new.pcap"
@@ -68,9 +68,22 @@ print(test_data_generator.df,test_data_generator.dataset,test_data_generator.lab
 # the second parameter is the kind of detector
 train_data_generator = NumpyGenerator(train_windows,"attack")
 train_data_generator.process_windows()
-print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
+#print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
 
 # test each label of each packet
 #for p in train_packets:
 #    print(p.get_label())
+
+
+
+
+# ----------------start learning with FeedForward--------------
+data = train_data_generator.dataset
+label = train_data_generator.label
+
+from feedforward import Feedforward
+print(data,label)
+fforward = Feedforward("Feedforward")
+
+fforward.learning(data,label)
 
