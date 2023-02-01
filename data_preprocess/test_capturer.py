@@ -9,8 +9,8 @@ from numpy_generator import NumpyGenerator
 # because of the wrong generate_dataset, training is test,test is training
 test_dataset_name = "../set_1/test_new.pcap"
 training_dataset_name = "../set_1/training_new.pcap"
-test_label_name = "../set_1/test.label"
-training_label_name = "../set_1/training.label"
+test_label_name = "../set_2/test.label"
+training_label_name = "../set_2/training.label"
 
 training_packet_capturer = PacketCapturer(None,training_dataset_name)
 training_packet_capturer.pcap2packets()
@@ -27,20 +27,20 @@ train_window_manager = WindowManager(train_packets)
 train_window_manager.add_packets(train_packets)
 train_window_manager.process_packets()
 train_windows = train_window_manager.windows
-#print("successfully get training windows, the number of windows is ", len(train_window_manager.windows))
+print("successfully get training windows, the number of windows is ", len(train_window_manager.windows))
 
 test_window_manager = WindowManager(test_packets)
 test_window_manager.add_packets(test_packets)
 test_window_manager.process_packets()
 test_windows = test_window_manager.windows
-#print("successfully get testing window, the number of windows is ",len(test_window_manager.windows))
+print("successfully get testing window, the number of windows is ",len(test_window_manager.windows))
 
 
 # ---------------start extracting features------------------- #
 test_fe = FeatureExtractor(test_windows)
 test_fe.add_features()
 test_fe.process_windows()
-#print(test_windows[0].stat,type(test_windows[0].stat))
+print(test_windows[0].stat,type(test_windows[0].stat))
 
 train_fe = FeatureExtractor(train_windows)
 train_fe.add_features()
@@ -54,7 +54,7 @@ print(test_data_generator.df,test_data_generator.dataset,test_data_generator.lab
 # the second parameter is the kind of detector
 train_data_generator = NumpyGenerator(train_windows,"attack")
 train_data_generator.process_windows()
-#print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
+print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
 
 # test each label of each packet
 #for p in train_packets:

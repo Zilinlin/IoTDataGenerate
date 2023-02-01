@@ -18,6 +18,7 @@ class NumpyGenerator:
         for wnd in self.windows:
             stat = wnd.stat
             self.df = self.df.append(stat,ignore_index=True)
+            #self.df = pd.concat([self.df,pd.DataFrame(stat)],axis=0, ignore_index=True)
             self.dataset = np.array(self.df)
             label = wnd.get_label("attack")
             self.label = np.concatenate((self.label,[label]),axis=0)

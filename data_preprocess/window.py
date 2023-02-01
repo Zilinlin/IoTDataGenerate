@@ -41,6 +41,8 @@ class Window:
         elif self.pkt_ifin_flow(self.flow["backward"], pkt):
             self.packets["backward"].append(pkt)
 
+        # this part is about the relationship between packet label and window label.
+        # if we only get two kinds of datasets
         if pkt.get_label() ==1:
             self.label["attack"] = 1
             logging.debug("Window is set to {} (attack)".format(self.label["attack"]))

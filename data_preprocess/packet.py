@@ -1,11 +1,14 @@
 # written by Hyunwoo Lee
+# added the serial number by Zilin
+# the serial_number is for label, because some packets will be dropped
+# and the serial number starts from 0
 
 import socket
 import dpkt
 import logging
 
 class Packet:
-    def __init__(self, ts, header, eth, network, transport, length):
+    def __init__(self, ts, header, eth, network, transport, length, serial_number):
         self.timestamp = ts
         self.header = header
         self.eth = eth
@@ -20,6 +23,10 @@ class Packet:
         else:
             self.label = 0
         self.length = length
+        self.serial_number = serial_number
+
+    def get_serial_number(self):
+        return self.serial_number
 
     def get_timestamp(self):
         return self.timestamp

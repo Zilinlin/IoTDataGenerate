@@ -106,6 +106,7 @@ def process_part(dir_name):
 
     np.save("data.npy", result_full_data)
     np.save("label.npy", result_label_data)
+    print("out_dict: ", out_dict)
 
     return 0
 
