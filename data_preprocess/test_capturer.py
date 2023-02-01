@@ -85,5 +85,6 @@ from feedforward import Feedforward
 print(data,label)
 fforward = Feedforward("Feedforward")
 
-fforward.learning(data,label)
+features_len = train_fe.features_len()
+fforward.learning(features_len,data,label)
 

@@ -16,7 +16,7 @@ class Feedforward(Algorithm):
 
     # Please implement the following functions
     # Concerning dataset, refer to the class TrainingSet
-    def learning(self, dataset, labels):
+    def learning(self, features, dataset, labels):
         #dataset = copy.deepcopy(windows.get_dataset(kind))
         dataset = np.array(dataset)
         self.scale = StandardScaler().fit(dataset)
@@ -24,7 +24,7 @@ class Feedforward(Algorithm):
         dataset = dataset.reshape((dataset.shape[0], 1, dataset.shape[1]))
 
         # this is the number of features
-        features = 5
+        features = features
         #features = len(windows.get_feature_names())
         #tmp = windows.get_labels(kind)
         #labels = []

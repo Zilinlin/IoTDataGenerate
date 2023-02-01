@@ -56,6 +56,9 @@ class Window:
     def get_packets(self,direction):
         return self.packets[direction]
 
+    def get_feature_value(self, feature):
+        return self.stat[feature]
+
     #add the current value to currently existing number
     def add_feature_value(self,feature,value):
         if feature not in self.stat:
