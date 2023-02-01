@@ -4,6 +4,7 @@ from packet_capturer_shen import PacketCapturer
 from window_manager import WindowManager
 from feature_extractor import FeatureExtractor
 from numpy_generator import NumpyGenerator
+from label_packet import generate_label_data, label_packets
 
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
@@ -23,6 +24,19 @@ test_packets = test_packet_capturer.packets
 print("length of train packets,",len(train_packets))
 print("length of test packets,", len(test_packets))
 
+# ----------------start labeling the train_packets and test_packets-------------------
+train_label = generate_label_data(training_label_name)
+test_label = generate_label_data(test_label_name)
+print("the shape of train_label,",train_label.shape)
+print("the shape of test_label,",test_label.shape)
+
+# filter the packets with label, drop the packet without label
+train_packets = label_packets(train_packets, train_label)
+test_packets = label_packets(test_packets, test_label)
+
+
+
+# ----------------start generating the windows with packets--------------
 train_window_manager = WindowManager(train_packets)
 train_window_manager.add_packets(train_packets)
 train_window_manager.process_packets()
