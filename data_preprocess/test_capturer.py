@@ -88,3 +88,9 @@ fforward = Feedforward("Feedforward")
 features_len = train_fe.features_len()
 fforward.learning(features_len,data,label)
 
+print("----------------start testing-------------")
+test_data = test_data_generator.dataset
+test_label = test_data_generator.label
+ret,pred = fforward.detection(test_data,test_label)
+print(ret)
+print(pred)

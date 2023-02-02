@@ -46,10 +46,12 @@ class Feedforward(Algorithm):
             self.classifier[kind] = None
             logging.info("{} {} classifier is not generated".format(self.get_name(), kind))
 
-    def detection(self, window, kind):
-        label = window.get_label(kind)
-        test = window.get_code().copy()
-        test = np.array(test)
+    # modified by zilin
+    def detection(self, dataset, label):
+        #label = window.get_label(kind)
+        #test = window.get_code().copy()
+        kind = "attack"
+        test = np.array(dataset)
         test = self.scale.transform(test)
         test = test.reshape((test.shape[0], 1, test.shape[1]))
         pred = list(self.classifier[kind].predict(test)[0][0])

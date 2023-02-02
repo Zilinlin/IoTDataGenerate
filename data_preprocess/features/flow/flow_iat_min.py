@@ -22,6 +22,8 @@ class FlowIatMin(Feature):
                 iat = curr - prep
                 if iat < val:
                     val = iat
+        if len(pkts)==0:
+            val =0
 
         window.add_feature_value(self.get_name(), val)
         logging.debug('{}: {}'.format(self.get_name(), val))
