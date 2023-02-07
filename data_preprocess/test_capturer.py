@@ -55,7 +55,7 @@ test_window_manager.process_packets()
 test_windows = test_window_manager.windows
 print("successfully get testing window, the number of windows is ",len(test_window_manager.windows))
 
-'''
+
 # ---------------start extracting features------------------- #
 test_fe = FeatureExtractor(test_windows)
 test_fe.add_features()
@@ -74,13 +74,13 @@ print(test_data_generator.df,test_data_generator.dataset,test_data_generator.lab
 # the second parameter is the kind of detector
 train_data_generator = NumpyGenerator(train_windows,"attack")
 train_data_generator.process_windows()
-#print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
+print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
 
 # test each label of each packet
 #for p in train_packets:
 #    print(p.get_label())
 
-
+'''
 
 
 # ----------------start learning with FeedForward--------------
