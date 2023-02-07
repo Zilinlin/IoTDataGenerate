@@ -5,7 +5,7 @@ import numpy as np
 
 # Window is the basic part in IoTEDEF
 class Window:
-    def __init__(self,protocol,saddr,sport,daddr,dport):
+    def __init__(self,protocol,saddr,sport,daddr,dport,period):
         self.flow = {}
         self.flow["forward"] = Flow(protocol,saddr,sport,daddr,dport)
         self.flow["backward"] = Flow(protocol,daddr,dport,saddr,sport)
@@ -21,6 +21,9 @@ class Window:
         self.label["attack"] = 0
         self.label["infection"] = 0
         self.label["reconnaissance"] = 0
+
+        #period means the during time of the window
+        self.period = period
 
         self.stat = {} # the statistics from feature to value
 
@@ -90,5 +93,8 @@ class Window:
             return self.label[kind]
         else:
             return self.label
+
+    def get_period(self):
+        return self.period
 
 

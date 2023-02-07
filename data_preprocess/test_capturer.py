@@ -6,6 +6,12 @@ from feature_extractor import FeatureExtractor
 from numpy_generator import NumpyGenerator
 from label_packet import generate_label_data, label_packets
 from lstm import LSTM
+
+
+# the hyperparameters of window manager
+window_size = 1
+swnd = True
+
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
 test_dataset_name = "../set_1/test_new.pcap"
@@ -37,19 +43,19 @@ test_packets = label_packets(test_packets, test_label)
 
 
 # ----------------start generating the windows with packets--------------
-train_window_manager = WindowManager(train_packets)
-train_window_manager.add_packets(train_packets)
+train_window_manager = WindowManager(train_packets,window_size,swnd)
+#train_window_manager.add_packets(train_packets)
 train_window_manager.process_packets()
 train_windows = train_window_manager.windows
 print("successfully get training windows, the number of windows is ", len(train_window_manager.windows))
 
-test_window_manager = WindowManager(test_packets)
-test_window_manager.add_packets(test_packets)
+test_window_manager = WindowManager(test_packets,window_size,swnd)
+#test_window_manager.add_packets(test_packets)
 test_window_manager.process_packets()
 test_windows = test_window_manager.windows
 print("successfully get testing window, the number of windows is ",len(test_window_manager.windows))
 
-
+'''
 # ---------------start extracting features------------------- #
 test_fe = FeatureExtractor(test_windows)
 test_fe.add_features()
@@ -91,6 +97,8 @@ fforward.learning(features_len,data,label)
 print("----------------start testing-------------")
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
+print("the test data label",test_label)
 ret,pred = fforward.detection(test_data,test_label)
-print(ret)
-print(pred)
+print("return,",ret)
+print("prediction:",pred)
+'''
