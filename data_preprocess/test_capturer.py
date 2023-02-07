@@ -1,4 +1,6 @@
 #written by Zilin Shen
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 from packet_capturer_shen import PacketCapturer
 from window_manager import WindowManager
@@ -80,7 +82,7 @@ print(train_data_generator.df,train_data_generator.dataset,train_data_generator.
 #for p in train_packets:
 #    print(p.get_label())
 
-'''
+
 
 
 # ----------------start learning with FeedForward--------------
@@ -94,6 +96,7 @@ fforward = Feedforward("Feedforward")
 features_len = train_fe.features_len()
 fforward.learning(features_len,data,label)
 
+'''
 print("----------------start testing-------------")
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
