@@ -15,7 +15,7 @@ window_size = 1
 swnd = True
 # the class of detector
 # attack, infection,
-kind = "reconnaissance"
+kind = "infection"
 
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
@@ -86,12 +86,25 @@ print(train_data_generator.df,train_data_generator.dataset,train_data_generator.
 #    print(p.get_label())
 
 
-
-
-# ----------------start learning with FeedForward--------------
+print("------------start learning with LSTM-----------")
+# the training data
 data = train_data_generator.dataset
 label = train_data_generator.label
 
+# the testing data
+test_data = test_data_generator.dataset
+test_label = test_data_generator.label
+
+from lstm import Lstm
+lstm = Lstm("lstm")
+features_len = train_fe.features_len()
+lstm.learning(features_len, data,label,kind)
+
+# start testing with LSTM
+lstm.detection(test_data,test_label,kind)
+
+'''
+# ----------------start learning with FeedForward--------------
 from feedforward import Feedforward
 print(data,label)
 fforward = Feedforward("Feedforward")
@@ -101,10 +114,8 @@ fforward.learning(features_len,data,label,kind)
 
 
 print("----------------start testing-------------")
-test_data = test_data_generator.dataset
-test_label = test_data_generator.label
 print("the test data label",test_label)
 fforward.detection(test_data,test_label,kind)
 #print("return,",ret)
 #print("prediction:",pred)
-
+'''
