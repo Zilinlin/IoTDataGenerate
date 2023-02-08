@@ -99,6 +99,6 @@ class FeatureExtractor:
     # extract feature of one window
     def extract_feature(self,window):
         for f in self.features:
-            print('the name of this feature',f.get_name)
+            #print('the name of this feature',f.get_name)
             f.extract_feature(window)
 

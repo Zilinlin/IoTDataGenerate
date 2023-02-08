@@ -13,6 +13,9 @@ from lstm import LSTM
 # the hyperparameters of window manager
 window_size = 1
 swnd = True
+# the class of detector
+# attack, infection,
+kind = "reconnaissance"
 
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
@@ -69,12 +72,12 @@ train_fe.add_features()
 train_fe.process_windows()
 
 #------------------ start processing the windows to numpy data---------------#
-test_data_generator = NumpyGenerator(test_windows,"attack")
+test_data_generator = NumpyGenerator(test_windows,kind)
 test_data_generator.process_windows()
 print(test_data_generator.df,test_data_generator.dataset,test_data_generator.label)
 
 # the second parameter is the kind of detector
-train_data_generator = NumpyGenerator(train_windows,"attack")
+train_data_generator = NumpyGenerator(train_windows,kind)
 train_data_generator.process_windows()
 print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
 
@@ -94,14 +97,14 @@ print(data,label)
 fforward = Feedforward("Feedforward")
 
 features_len = train_fe.features_len()
-fforward.learning(features_len,data,label)
+fforward.learning(features_len,data,label,kind)
 
-'''
+
 print("----------------start testing-------------")
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
 print("the test data label",test_label)
-ret,pred = fforward.detection(test_data,test_label)
-print("return,",ret)
-print("prediction:",pred)
-'''
+fforward.detection(test_data,test_label,kind)
+#print("return,",ret)
+#print("prediction:",pred)
+

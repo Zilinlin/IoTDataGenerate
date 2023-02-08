@@ -88,5 +88,5 @@ class PacketCapturer:
             packet = Packet(ts, header, ether, ip, trans, length, pkt_count)
 
             self.packets.append(packet)
-            print('reading pacp file finished, the packet count is:', pkt_count)
-            print('the error packet count is: ',none_count)
+            #print('reading pacp file finished, the packet count is:', pkt_count)
+            #print('the error packet count is: ',none_count)
