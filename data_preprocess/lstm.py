@@ -101,9 +101,30 @@ class Lstm(Algorithm):
 
         #calculate the accuracy
         count_same = 0
+        fp=0
+        tp=0
+        fn=0
+        tn=0
+        others=0
         for i in range(len(label)):
+            o = label[i]
+            d=pred[i]
             if label[i] == pred[i]:
                 count_same += 1
+            # calculate FP TP...
+            if o==0 & d==1:
+                fp+=1
+            elif o==1 & d==1:
+                tp += 1
+            elif o==1 & d==0:
+                fn += 1
+            elif o==0 & d==0:
+                tn += 1
+            else:
+                others +=1
+                print("o:",o,",d:",d)
+
         acc = count_same/len(label)
-        print("the accuracy of detection", acc)
+        print("the accuracy of detection", acc,"length of label",len(label))
+        print("fp:",fp,",tp:",tp,",fn:",fn,",tn:",tn,",others:",others,"count_same:",count_same)
         return pred, acc

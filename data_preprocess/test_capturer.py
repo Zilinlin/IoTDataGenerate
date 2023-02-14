@@ -15,7 +15,7 @@ window_size = 1
 swnd = True
 # the class of detector
 # attack, infection,
-kind = "infection"
+kind = "reconnaissance"
 
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
@@ -94,6 +94,7 @@ label = train_data_generator.label
 # the testing data
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
+
 
 from lstm import Lstm
 lstm = Lstm("lstm")

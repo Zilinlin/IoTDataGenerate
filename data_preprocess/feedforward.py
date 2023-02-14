@@ -80,10 +80,31 @@ class Feedforward(Algorithm):
 
         # calculate the accuracy of detection
         count_same = 0
+        fp =0
+        fn=0
+        tp=0
+        tn=0
+        others=0
         for i in range(len(label)):
             if label[i] == pred[i]:
                 count_same += 1
+        for i in range(len(label)):
+            o,d=label[i], pred[i]
+            o = o.astype("int32")
+            d = d.astype("int32")
+            if o==0 & d==0:
+                tn+=1
+            elif o==0 & d==1:
+                fp+=1
+            elif o==1 & d==1:
+                tp+=1
+            elif o==1 & d==0:
+                fn+=1
+            else:
+                others +=1
+                print("o:",o,"d:",d)
+        print("tp:",tp,",fp:",fp,"tn:",tn,",fn:",fn,",others:",others)
         acc = count_same/len(label)
         print("the accuracy of detection",acc)
-
+        print("the count of label:",len(label))
         return pred,acc
