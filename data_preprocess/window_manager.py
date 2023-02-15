@@ -47,6 +47,7 @@ class WindowManager:
 
                 start_time = end_time
                 end_time = start_time + self.period
+                print("current number of windows,",len(self.windows))
         else:
             self.process_partial_packets(self.queue)
 
@@ -86,7 +87,7 @@ class WindowManager:
             #print("iteration is running .........")
 
             proto,saddr,sport,daddr,dport = pkt.get_each_flow_info()
-            #print("pkt info: ",proto,saddr,sport,daddr,dport)
+            print("pkt info: ",proto,saddr,sport,daddr,dport,pkt.get_serial_number())
             wnd = Window(proto,saddr,sport,daddr,dport,self.period)
             #print("wnd successfully")
             found = False
@@ -106,6 +107,8 @@ class WindowManager:
                 partial_windows.append(wnd)
 
         # then add the windows of this time interval to self.windows
+        print("the number of packets of each partial_windows",len(packets))
+        print("the number of windows of each partial_windows",len(partial_windows))
         for wnd in partial_windows:
             self.windows.append(wnd)
 

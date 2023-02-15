@@ -10,11 +10,12 @@ def generate_label_data(file_name):
     f = open(file_name,'r')
     data = f.readlines()
     label_data = np.empty((0,))
+    print("the count of label lines",len(data))
     for line in data:
         odom = line.split(',')
         la = int(odom[-1])
         label_data = np.concatenate((label_data,[la]),axis=0)
-    print(label_data)
+    print(label_data.shape)
     return label_data
 
 # label the packets with label_data
@@ -33,5 +34,5 @@ def label_packets(pkts,label_data):
 
 
 # these lines is for testing
-generate_label_data('../set_1/test.label')
+generate_label_data('../set_1/training.label')
 

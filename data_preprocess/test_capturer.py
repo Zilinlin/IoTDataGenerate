@@ -21,8 +21,8 @@ kind = "reconnaissance"
 # because of the wrong generate_dataset, training is test,test is training
 test_dataset_name = "../set_1/test_new.pcap"
 training_dataset_name = "../set_1/training_new.pcap"
-test_label_name = "../set_2/test.label"
-training_label_name = "../set_2/training.label"
+test_label_name = "../set_1/test.label"
+training_label_name = "../set_1/training.label"
 
 training_packet_capturer = PacketCapturer(None,training_dataset_name)
 training_packet_capturer.pcap2packets()
@@ -43,7 +43,9 @@ print("the shape of test_label,",test_label.shape)
 
 # filter the packets with label, drop the packet without label
 train_packets = label_packets(train_packets, train_label)
+print('length of training packets after labeling',len(train_packets))
 test_packets = label_packets(test_packets, test_label)
+print("length of testing packets after labeling",len(test_packets))
 
 
 
@@ -86,7 +88,7 @@ print(train_data_generator.df,train_data_generator.dataset,train_data_generator.
 #    print(p.get_label())
 
 
-print("------------start learning with LSTM-----------")
+# -----------get the training and testing data of numpy format
 # the training data
 data = train_data_generator.dataset
 label = train_data_generator.label
@@ -94,7 +96,8 @@ label = train_data_generator.label
 # the testing data
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
-
+'''
+# -----------------start learning with LSTM----------------------
 
 from lstm import Lstm
 lstm = Lstm("lstm")
@@ -105,9 +108,10 @@ lstm.learning(features_len, data,label,kind)
 lstm.detection(test_data,test_label,kind)
 
 '''
+
 # ----------------start learning with FeedForward--------------
 from feedforward import Feedforward
-print(data,label)
+#print(data,label)
 fforward = Feedforward("Feedforward")
 
 features_len = train_fe.features_len()
@@ -119,4 +123,4 @@ print("the test data label",test_label)
 fforward.detection(test_data,test_label,kind)
 #print("return,",ret)
 #print("prediction:",pred)
-'''
+
