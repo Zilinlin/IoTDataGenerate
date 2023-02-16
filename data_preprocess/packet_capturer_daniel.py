@@ -13,8 +13,8 @@ class timeval(ctypes.Structure):
 
 
 class pcap_pkthdr(ctypes.Structure):
-    _fields_ = [("ts", timeval), 
-            ("caplen", ctypes.c_uint), 
+    _fields_ = [("ts", timeval),
+            ("caplen", ctypes.c_uint),
             ("len", ctypes.c_uint)]
 
 def inet_to_str(addr):
@@ -47,7 +47,7 @@ class PacketCapturer:
             header.ts.tv_sec = hbuf.ts.tv_sec
             header.ts.tv_usec = hbuf.ts.tv_usec
             self.pp(header, packet)
-    
+
         logging.info("PACKET:Quit Packet Capturer")
 
 

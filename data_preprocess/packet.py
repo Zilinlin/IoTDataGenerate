@@ -31,6 +31,9 @@ class Packet:
     def get_timestamp(self):
         return self.timestamp
 
+    def set_timestamp(self,ts):
+        self.timestamp = ts
+
     def get_header(self):
         return self.header
 
