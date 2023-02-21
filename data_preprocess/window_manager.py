@@ -48,6 +48,16 @@ class WindowManager:
                 start_time = end_time
                 end_time = start_time + self.period
                 print("current number of windows,",len(self.windows))
+
+            #handle the last remaining part
+            if start_time < last_time:
+                end_time = last_time
+                print("the start time of sliding window:",start_time)
+                print("the end time of sliding window:",end_time)
+                temp_packets = self.divide_packets(start_time, end_time)
+                self.process_partial_packets(temp_packets)
+
+            print("first time:",first_time,"last time:",last_time)
         else:
             self.process_partial_packets(self.queue)
 
@@ -87,7 +97,7 @@ class WindowManager:
             #print("iteration is running .........")
 
             proto,saddr,sport,daddr,dport = pkt.get_each_flow_info()
-            print("pkt info: ",proto,saddr,sport,daddr,dport,pkt.get_serial_number())
+            #print("pkt info: ",proto,saddr,sport,daddr,dport,pkt.get_serial_number())
             wnd = Window(proto,saddr,sport,daddr,dport,self.period)
             #print("wnd successfully")
             found = False

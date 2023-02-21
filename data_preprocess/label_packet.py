@@ -6,20 +6,26 @@ import logging
 import numpy as np
 
 # change the label file to label.npy
+# add another value time
 def generate_label_data(file_name):
     f = open(file_name,'r')
     data = f.readlines()
     label_data = np.empty((0,))
+    time_data = np.empty((0,))
     print("the count of label lines",len(data))
     for line in data:
         odom = line.split(',')
         la = int(odom[-1])
         label_data = np.concatenate((label_data,[la]),axis=0)
+
+        # add each time to the data
+        time = float(odom[1])
+        time_data = np.concatenate((time_data,[time]),axis=0)
     print(label_data.shape)
-    return label_data
+    return label_data, time_data
 
 # label the packets with label_data
-def label_packets(pkts,label_data):
+def label_packets(pkts,label_data,time_data):
     new_packets = []
     length_label = label_data.shape[0]
     for pkt in pkts:
@@ -27,6 +33,9 @@ def label_packets(pkts,label_data):
         if serial_number < length_label:
             label = label_data[serial_number]
             pkt.set_label(label)
+
+            time = time_data[serial_number]
+            pkt.set_timestamp(time)
             new_packets.append(pkt)
         else:
             break

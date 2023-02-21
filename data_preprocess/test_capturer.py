@@ -33,21 +33,21 @@ test_packet_capturer.pcap2packets()
 test_packets = test_packet_capturer.packets
 
 # ---------------------add the random perturbation to test_packets ----------
-random_perturb_time(test_packets)
+#random_perturb_time(test_packets)
 
 print("length of train packets,",len(train_packets))
 print("length of test packets,", len(test_packets))
 
 # ----------------start labeling the train_packets and test_packets-------------------
-train_label = generate_label_data(training_label_name)
-test_label = generate_label_data(test_label_name)
+train_label, train_ts = generate_label_data(training_label_name)
+test_label, test_ts = generate_label_data(test_label_name)
 print("the shape of train_label,",train_label.shape)
 print("the shape of test_label,",test_label.shape)
 
 # filter the packets with label, drop the packet without label
-train_packets = label_packets(train_packets, train_label)
+train_packets = label_packets(train_packets, train_label,train_ts)
 print('length of training packets after labeling',len(train_packets))
-test_packets = label_packets(test_packets, test_label)
+test_packets = label_packets(test_packets, test_label,test_ts)
 print("length of testing packets after labeling",len(test_packets))
 
 
@@ -99,7 +99,9 @@ label = train_data_generator.label
 # the testing data
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
-'''
+
+
+
 # -----------------start learning with LSTM----------------------
 
 from lstm import Lstm
@@ -110,8 +112,8 @@ lstm.learning(features_len, data,label,kind)
 # start testing with LSTM
 lstm.detection(test_data,test_label,kind)
 
-'''
 
+'''
 # ----------------start learning with FeedForward--------------
 from feedforward import Feedforward
 #print(data,label)
@@ -143,5 +145,5 @@ for i in range(len(label)):
 print("count_positive:",count_positive)
 print("count_negative:",count_negative)
 print("count_others:",count_others)
-
+'''
 
