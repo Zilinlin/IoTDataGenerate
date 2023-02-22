@@ -86,21 +86,24 @@ train_data_generator = NumpyGenerator(train_windows,kind)
 train_data_generator.process_windows()
 print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
 
+# draw the correlation picture of training dataset
+train_data_generator.draw_corr()
+
 # test each label of each packet
 #for p in train_packets:
 #    print(p.get_label())
 
 
 # -----------get the training and testing data of numpy format
-# the training data
-data = train_data_generator.dataset
-label = train_data_generator.label
+# the training data, use balancing dataset and label
+data = train_data_generator.dataset_smo
+label = train_data_generator.label_smo
 
 # the testing data
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
 
-
+'''
 
 # -----------------start learning with LSTM----------------------
 
@@ -145,5 +148,4 @@ for i in range(len(label)):
 print("count_positive:",count_positive)
 print("count_negative:",count_negative)
 print("count_others:",count_others)
-'''
 

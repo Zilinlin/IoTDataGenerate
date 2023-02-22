@@ -79,6 +79,7 @@ class Feedforward(Algorithm):
         logging.debug("label: {}, pred: {}, ret: {}".format(label, pred, ret))
 
         # calculate the accuracy of detection
+        '''
         count_same = 0
         fp =0
         fn=0
@@ -94,17 +95,23 @@ class Feedforward(Algorithm):
             d = d.astype("int32")
             if o==0 & d==0:
                 tn+=1
-            elif o==0 & d==1:
-                fp+=1
-            elif o==1 & d==1:
-                tp+=1
             elif o==1 & d==0:
                 fn+=1
+            elif o==1 & d==1:
+                tp+=1
+            elif int(o)==0 & int(d)==1:
+                fp+=1
             else:
                 others +=1
                 print("o:",o,"d:",d)
-        print("tp:",tp,",fp:",fp,"tn:",tn,",fn:",fn,",others:",others)
-        acc = count_same/len(label)
-        print("the accuracy of detection",acc)
+        '''
+        from sklearn.metrics import confusion_matrix
+        tn, fp, fn, tp = confusion_matrix(label,pred).ravel()
+        print("tp:",tp,",fp:",fp,"tn:",tn,",fn:",fn)
+        acc = (tn+tp)/len(label)
+        precision = (tp)/(tp+fp)
+        recall = (tp)/(tp+fn)
+        f1 = (2*precision*recall)/(precision+recall)
+        print("accuracy:",acc,",f1:",f1,",recall:",recall,"precision:", precision)
         print("the count of label:",len(label))
         return pred,acc
