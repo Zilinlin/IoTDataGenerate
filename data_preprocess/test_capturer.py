@@ -12,6 +12,7 @@ from random_perturb import random_perturb_time
 
 # the hyperparameters of window manager
 window_size = 1
+move_size = 0.3 #how long the movement of window
 swnd = True
 # the class of detector
 # attack, infection,
@@ -53,13 +54,13 @@ print("length of testing packets after labeling",len(test_packets))
 
 
 # ----------------start generating the windows with packets--------------
-train_window_manager = WindowManager(train_packets,window_size,swnd)
+train_window_manager = WindowManager(train_packets,window_size,swnd,move_size)
 #train_window_manager.add_packets(train_packets)
 train_window_manager.process_packets()
 train_windows = train_window_manager.windows
 print("successfully get training windows, the number of windows is ", len(train_window_manager.windows))
 
-test_window_manager = WindowManager(test_packets,window_size,swnd)
+test_window_manager = WindowManager(test_packets,window_size,swnd,move_size)
 #test_window_manager.add_packets(test_packets)
 test_window_manager.process_packets()
 test_windows = test_window_manager.windows
@@ -87,7 +88,7 @@ train_data_generator.process_windows()
 print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
 
 # draw the correlation picture of training dataset
-train_data_generator.draw_corr()
+#train_data_generator.draw_corr()
 
 # test each label of each packet
 #for p in train_packets:

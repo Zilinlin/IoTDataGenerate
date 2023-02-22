@@ -6,7 +6,7 @@ import copy
 
 
 class WindowManager:
-    def __init__(self,packets_queue,period,swnd):
+    def __init__(self,packets_queue,period,swnd,move_size):
         print("the length of packets_queue",len(packets_queue))
 
         # the queue is all packets
@@ -15,6 +15,7 @@ class WindowManager:
 
         self.period = period # the period of window
         self.sliding_window = swnd # which is True/False, if use sliding window
+        self.move_size = move_size
         #self.add_packets(packets_queue)
         #for pkt in packets_queue:
         #    self.queue.append(pkt)
@@ -45,7 +46,7 @@ class WindowManager:
                 temp_packets = self.divide_packets(start_time, end_time)
                 self.process_partial_packets(temp_packets)
 
-                start_time = end_time
+                start_time = start_time + self.move_size
                 end_time = start_time + self.period
                 print("current number of windows,",len(self.windows))
 

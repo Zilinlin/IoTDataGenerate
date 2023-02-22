@@ -5,8 +5,8 @@
 import pandas as pd
 import numpy as np
 from imblearn.over_sampling import SMOTE
-import matplotlib.pyplot as plt
-import seaborn as sns
+#import matplotlib.pyplot as plt
+#import seaborn as sns
 
 class NumpyGenerator:
     def __init__(self,windows,kind):
@@ -32,10 +32,11 @@ class NumpyGenerator:
         smo = SMOTE()
         self.dataset_smo, self.label_smo = smo.fit_resample(self.dataset,self.label)
 
+    '''
     def draw_corr(self):
         # add the label index to dataframe and calculate the correlation
-        df = self.df.copy()
-        df['class'] = list(self.label)
+        df = self.df
+        df['class'] = self.label
         corr = df.corr()
         ax = plt.subplots(figsize= (40,40))
         ax = sns.heatmap(corr, vmax=.8, square=True, annot=True)
@@ -43,6 +44,7 @@ class NumpyGenerator:
         plt.yticks(fontsize=20)
 
         plt.savefig('picture.jpg')
+    '''
 
 
 
