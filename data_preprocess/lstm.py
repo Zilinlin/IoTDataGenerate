@@ -99,6 +99,7 @@ class Lstm(Algorithm):
         else:
             logging.debug("lstm> label: {}, pred: {}, ret: {}, time_step: {}".format(label, pred, ret, TIME_STEP))
 
+        '''
         #calculate the accuracy
         count_same = 0
         fp=0
@@ -123,8 +124,14 @@ class Lstm(Algorithm):
             else:
                 others +=1
                 print("o:",o,",d:",d)
+        '''
+        from sklearn.metrics import confusion_matrix
+        tn, fp, fn, tp = confusion_matrix(label, pred).ravel()
 
-        acc = count_same/len(label)
-        print("the accuracy of detection", acc,"length of label",len(label))
-        print("fp:",fp,",tp:",tp,",fn:",fn,",tn:",tn,",others:",others,"count_same:",count_same)
+        acc = (tn+tp)/len(label)
+        precision = (tp)/(tp+fp)
+        recall = (tp)/(tp+fn)
+        f1 = (2*precision*recall)/(precision+recall)
+        print("accuracy:", acc,"precision:", precision, "recall:", recall, "f1:",f1)
+        print("fp:",fp,",tp:",tp,",fn:",fn,",tn:",tn)
         return pred, acc

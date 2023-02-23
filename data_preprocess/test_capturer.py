@@ -12,11 +12,11 @@ from random_perturb import random_perturb_time
 
 # the hyperparameters of window manager
 window_size = 1
-move_size = 0.3 #how long the movement of window
+move_size = 0.1 #how long the movement of window
 swnd = True
 # the class of detector
 # attack, infection,
-kind = "infection"
+kind = "attack"
 
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
@@ -34,7 +34,7 @@ test_packet_capturer.pcap2packets()
 test_packets = test_packet_capturer.packets
 
 # ---------------------add the random perturbation to test_packets ----------
-#random_perturb_time(test_packets)
+random_perturb_time(test_packets)
 
 print("length of train packets,",len(train_packets))
 print("length of test packets,", len(test_packets))
@@ -104,7 +104,7 @@ label = train_data_generator.label_smo
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
 
-'''
+
 
 # -----------------start learning with LSTM----------------------
 
@@ -132,7 +132,7 @@ print("the test data label",test_label)
 fforward.detection(test_data,test_label,kind)
 #print("return,",ret)
 #print("prediction:",pred)
-
+'''
 # to calculate more details about test_data and test_label
 print("the total number of training data:", len(label))
 count_positive = 0
