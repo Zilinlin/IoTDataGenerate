@@ -17,6 +17,8 @@ swnd = True
 # the class of detector
 # attack, infection,
 kind = "attack"
+# the chosen algorithm "feedforward" or "lstm"
+algorithm = "feedforward"
 
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
@@ -106,32 +108,29 @@ test_label = test_data_generator.label
 
 
 
-# -----------------start learning with LSTM----------------------
+# -----------------start learning with some algorithm----------------------
 
 from lstm import Lstm
 lstm = Lstm("lstm")
-features_len = train_fe.features_len()
-lstm.learning(features_len, data,label,kind)
 
-# start testing with LSTM
-lstm.detection(test_data,test_label,kind)
-
-
-'''
-# ----------------start learning with FeedForward--------------
 from feedforward import Feedforward
-#print(data,label)
 fforward = Feedforward("Feedforward")
 
 features_len = train_fe.features_len()
-fforward.learning(features_len,data,label,kind)
 
+if algorithm == "lstm":
+    lstm.learning(features_len, data,label,kind)
 
-print("----------------start testing-------------")
-print("the test data label",test_label)
-fforward.detection(test_data,test_label,kind)
-#print("return,",ret)
-#print("prediction:",pred)
+    # start testing with LSTM
+    lstm.detection(test_data,test_label,kind)
+
+elif algorithm == "feedforward":
+    fforward.learning(features_len,data,label,kind)
+
+    print("----------------start testing-------------")
+    print("the test data label",test_label)
+    fforward.detection(test_data,test_label,kind)
+
 '''
 # to calculate more details about test_data and test_label
 print("the total number of training data:", len(label))
@@ -149,4 +148,5 @@ for i in range(len(label)):
 print("count_positive:",count_positive)
 print("count_negative:",count_negative)
 print("count_others:",count_others)
+'''
 
