@@ -51,6 +51,7 @@ class WindowManager:
                 print("current number of windows,",len(self.windows))
 
             #handle the last remaining part
+            '''
             if start_time < last_time:
                 end_time = last_time
                 print("the start time of sliding window:",start_time)
@@ -59,6 +60,7 @@ class WindowManager:
                 self.process_partial_packets(temp_packets)
 
             print("first time:",first_time,"last time:",last_time)
+            '''
         else:
             self.process_partial_packets(self.queue)
 

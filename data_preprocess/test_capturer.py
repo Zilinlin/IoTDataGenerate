@@ -15,10 +15,10 @@ window_size = 1
 move_size = 0.1 #how long the movement of window
 swnd = True
 # the class of detector
-# attack, infection,
-kind = "attack"
+# attack, infection,reconnaissance
+kind = "reconnaissance"
 # the chosen algorithm "feedforward" or "lstm"
-algorithm = "feedforward"
+algorithm = "lstm"
 
 # get the dataset from
 # because of the wrong generate_dataset, training is test,test is training
