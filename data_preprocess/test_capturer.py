@@ -2,6 +2,7 @@
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
+import numpy as np
 from packet_capturer_daniel import PacketCapturer
 from window_manager import WindowManager
 from feature_extractor import FeatureExtractor
@@ -102,6 +103,8 @@ print(train_data_generator.df,train_data_generator.dataset,train_data_generator.
 data = train_data_generator.dataset_smo
 label = train_data_generator.label_smo
 
+np.save('r_data.npy',data)
+np.save('r_label.npy',label)
 # the testing data
 test_data = test_data_generator.dataset
 test_label = test_data_generator.label
