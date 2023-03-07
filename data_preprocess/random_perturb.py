@@ -3,12 +3,17 @@
 
 import random
 
-# add a random time delay of [0,0.4) for each packet
+# the perturbation will only delay the packets from attacker
+# only delay the reconnaissance packet
 def random_perturb_time(packets):
     for pkt in packets:
-      ts = pkt.get_timestamp()
-      ts += 0.4*random.random()
-      pkt.set_timestamp(ts)
+      label = pkt.get_label()
+      if label == 3:
+          ts = pkt.get_timestamp()
+          print("old timestamp:",ts)
+          ts = ts * 10
+          print("new timestamp:",ts)
+          pkt.set_timestamp(ts)
 
 
 

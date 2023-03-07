@@ -37,7 +37,7 @@ test_packet_capturer.pcap2packets()
 test_packets = test_packet_capturer.packets
 
 # ---------------------add the random perturbation to test_packets ----------
-random_perturb_time(test_packets)
+#random_perturb_time(test_packets)
 
 print("length of train packets,",len(train_packets))
 print("length of test packets,", len(test_packets))
@@ -54,7 +54,7 @@ print('length of training packets after labeling',len(train_packets))
 test_packets = label_packets(test_packets, test_label,test_ts)
 print("length of testing packets after labeling",len(test_packets))
 
-
+random_perturb_time(test_packets)
 
 # ----------------start generating the windows with packets--------------
 train_window_manager = WindowManager(train_packets,window_size,swnd,move_size)
