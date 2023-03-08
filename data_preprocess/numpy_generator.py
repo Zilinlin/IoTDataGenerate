@@ -30,7 +30,9 @@ class NumpyGenerator:
 
         #add the balancing part directly
         smo = SMOTE()
-        self.dataset_smo, self.label_smo = smo.fit_resample(self.dataset,self.label)
+
+        if len(self.dataset) > 1:
+            self.dataset_smo, self.label_smo = smo.fit_resample(self.dataset,self.label)
 
     '''
     def draw_corr(self):

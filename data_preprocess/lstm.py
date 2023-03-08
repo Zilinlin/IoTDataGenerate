@@ -72,6 +72,21 @@ class Lstm(Algorithm):
             self.classifier[kind] = None
             logging.info("{} {} classifier is not generated".format(self.get_name(), kind))
 
+
+    def cal_fitness(self, dataset, label, kind):
+        test = np.array(dataset)
+        test = self.scale.transform(test)
+        fallback = False
+        try:
+            test = test.reshape((test.shape[0], TIME_STEP, int(test.shape[1] / TIME_STEP)))
+        except:
+            fallback = True
+            test = test.reshape((test.shape[0],1,test.shape[1]))
+
+        pred = list(self.classifier[kind].predict(test))
+        return pred
+
+
     def detection(self, dataset, label, kind):
         #logging.debug("window.get_code(): {}".format(window.get_code()))
         #label = window.get_label(kind)

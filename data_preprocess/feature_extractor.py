@@ -20,6 +20,9 @@ class FeatureExtractor:
         self.features = []
         self.windows = windows
 
+        # move the add_features part to initiating part of FeatureExtractor
+        self.add_features()
+
     def add_windows(self,windows):
         for wnd in windows:
             self.windows.append(wnd)
@@ -95,6 +98,10 @@ class FeatureExtractor:
     def process_windows(self):
         for wnd in self.windows:
             self.extract_feature(wnd)
+
+    # this function only process one window
+    def process_window(self, window):
+        self.extract_feature(window)
 
     # extract feature of one window
     def extract_feature(self,window):

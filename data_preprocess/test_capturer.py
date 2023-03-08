@@ -9,7 +9,8 @@ from feature_extractor import FeatureExtractor
 from numpy_generator import NumpyGenerator
 from label_packet import generate_label_data, label_packets
 from lstm import LSTM
-from random_perturb import random_perturb_time
+from random_perturb import random_perturb
+from pso import PSO
 
 # the hyperparameters of window manager
 window_size = 1
@@ -36,9 +37,6 @@ test_packet_capturer = PacketCapturer(None,test_dataset_name)
 test_packet_capturer.pcap2packets()
 test_packets = test_packet_capturer.packets
 
-# ---------------------add the random perturbation to test_packets ----------
-#random_perturb_time(test_packets)
-
 print("length of train packets,",len(train_packets))
 print("length of test packets,", len(test_packets))
 
@@ -54,7 +52,8 @@ print('length of training packets after labeling',len(train_packets))
 test_packets = label_packets(test_packets, test_label,test_ts)
 print("length of testing packets after labeling",len(test_packets))
 
-random_perturb_time(test_packets)
+# -----------start randomly perturbing packets--
+#random_perturb(test_packets)
 
 # ----------------start generating the windows with packets--------------
 train_window_manager = WindowManager(train_packets,window_size,swnd,move_size)
@@ -72,12 +71,12 @@ print("successfully get testing window, the number of windows is ",len(test_wind
 
 # ---------------start extracting features------------------- #
 test_fe = FeatureExtractor(test_windows)
-test_fe.add_features()
+#test_fe.add_features()
 test_fe.process_windows()
 print(test_windows[0].stat,type(test_windows[0].stat))
 
 train_fe = FeatureExtractor(train_windows)
-train_fe.add_features()
+#train_fe.add_features()
 train_fe.process_windows()
 
 #------------------ start processing the windows to numpy data---------------#
@@ -124,8 +123,20 @@ features_len = train_fe.features_len()
 if algorithm == "lstm":
     lstm.learning(features_len, data,label,kind)
 
+    # ------- prepare for pso algorithm ------
+    # first find a window which label is reconnaissance
+    for window in test_windows:
+        if window.get_label(kind) == 1:
+            pso_window = window
+            break
+    range_speed = [(-0.02,0.02),(-2,2)]
+    range_pop = [(0,0.4),(0,40)]
+    pso = PSO(0.01, 300, pso_window, range_speed,range_pop, lstm)
+
+
+
     # start testing with LSTM
-    lstm.detection(test_data,test_label,kind)
+    #lstm.detection(test_data,test_label,kind)
 
 elif algorithm == "feedforward":
     fforward.learning(features_len,data,label,kind)

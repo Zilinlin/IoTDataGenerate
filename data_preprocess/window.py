@@ -9,9 +9,12 @@ class Window:
         self.flow = {}
         self.flow["forward"] = Flow(protocol,saddr,sport,daddr,dport)
         self.flow["backward"] = Flow(protocol,daddr,dport,saddr,sport)
+
         self.packets = {}
         self.packets["forward"] = []
         self.packets["backward"] = []
+        # this means all the packets of forward and backward
+        self.packets["total"] = []
 
         # the start time and end time of window
         self.window_start_time = None
@@ -39,6 +42,7 @@ class Window:
     def add_packet(self, pkt):
         protocol, saddr, sport, daddr, dport = pkt.get_each_flow_info()
 
+        self.packets["total"].append(pkt)
         if self.pkt_ifin_flow(self.flow["forward"],pkt):
             self.packets["forward"].append(pkt)
         elif self.pkt_ifin_flow(self.flow["backward"], pkt):

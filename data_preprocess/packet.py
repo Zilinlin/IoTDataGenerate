@@ -208,3 +208,7 @@ class Packet:
     def get_packet_length(self):
         return self.length
         #return self.header.getcaplen()
+
+    # add a set packet length function for perturbation
+    def set_packet_length(self,length):
+        self.length = length
