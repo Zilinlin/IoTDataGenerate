@@ -131,6 +131,10 @@ class PSO:
                 if self.fitness[j] < self.p_best_fit[j]:
                     self.p_best_fit[j] = self.fitness[j]
                     self.p_best_pop[j] = self.pop[j].copy()
+
+                if self.fitness[j] > self.p_best_fit[j] and self.fitness[j] > 0.8:
+                    self.initiate_pop_fit()
+                    self.get_initial_best()
             # is fit is smaller than 0.1 (totally < 0.5), then stop the generationss
             if fit < 0.1:
                 print("Current window evasion attack succeeds!")

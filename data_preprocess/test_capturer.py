@@ -2,6 +2,7 @@
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
+import time
 import numpy as np
 from packet_capturer_daniel import PacketCapturer
 from window_manager import WindowManager
@@ -134,6 +135,7 @@ if algorithm == "lstm":
 
     mani_windows = []
 
+    start_time = time.process_time()
     for i in range(len(test_windows)):
         if test_label[i] == 1:
             window_count += 1
@@ -150,6 +152,8 @@ if algorithm == "lstm":
         #    mani_windows.append(test_windows[i])
 
     # process the mani windows
+    end_time = time.process_time()
+
     mani_fe = FeatureExtractor(mani_windows)
     mani_fe.process_windows()
     mani_data_generator = NumpyGenerator(mani_windows,kind)
@@ -159,7 +163,7 @@ if algorithm == "lstm":
     print("start testing the manipulated windows")
     lstm.detection(mani_data, mani_label, kind)
 
-
+    print("500 windows manipulation time:", str(end_time - start_time))
 
 
     # start testing with LSTM
