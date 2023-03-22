@@ -85,7 +85,7 @@ test_data_generator.process_windows()
 print(test_data_generator.df,test_data_generator.dataset,test_data_generator.label)
 
 # the second parameter is the kind of detector
-train_data_generator = NumpyGenerator(train_windows,kind)
+train_data_generator = NumpyGenerator(train_windows,kind,True)
 train_data_generator.process_windows()
 print(train_data_generator.df,train_data_generator.dataset,train_data_generator.label)
 
@@ -123,15 +123,42 @@ features_len = train_fe.features_len()
 if algorithm == "lstm":
     lstm.learning(features_len, data,label,kind)
 
+    lstm.detection(test_data, test_label, kind)
     # ------- prepare for pso algorithm ------
-    # first find a window which label is reconnaissance
-    for window in test_windows:
-        if window.get_label(kind) == 1:
-            pso_window = window
-            break
+    # first find a 100th window which label is reconnaissance
+    # because the calculation result of
+    window_count = 0
     range_speed = [(-0.02,0.02),(-2,2)]
     range_pop = [(0,0.4),(0,40)]
-    pso = PSO(0.01, 300, pso_window, range_speed,range_pop, lstm)
+    learning_rate = [0.001, 0.1]
+
+    mani_windows = []
+
+    for i in range(len(test_windows)):
+        if test_label[i] == 1:
+            window_count += 1
+            if window_count >= 300:
+                break
+
+            if window_count >=200:
+                print("current manipulating window number:",i)
+                pso_window = test_windows[i]
+                # add this to limit current running time
+                pso = PSO(learning_rate, 100, pso_window, range_speed,range_pop, lstm)
+                mani_windows.append(pso.get_window())
+        #else:
+        #    mani_windows.append(test_windows[i])
+
+    # process the mani windows
+    mani_fe = FeatureExtractor(mani_windows)
+    mani_fe.process_windows()
+    mani_data_generator = NumpyGenerator(mani_windows,kind)
+    mani_data_generator.process_windows()
+    mani_data = mani_data_generator.dataset
+    mani_label = mani_data_generator.label
+    print("start testing the manipulated windows")
+    lstm.detection(mani_data, mani_label, kind)
+
 
 
 

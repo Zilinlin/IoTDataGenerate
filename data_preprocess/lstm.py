@@ -61,7 +61,7 @@ class Lstm(Algorithm):
 
         print("the info of dataset," ,dataset.shape)
         try:
-            self.classifier[kind].fit(dataset, labels, epochs=50, validation_split=0.1, verbose=2)
+            self.classifier[kind].fit(dataset, labels, epochs=20, validation_split=0.1, verbose=2)
             if fallback:
                 logging.info("{} {} classifier is generated with the time step 1".format(self.get_name(), kind))
                 print("classifier is generated with time step 1")
@@ -105,6 +105,7 @@ class Lstm(Algorithm):
         predicts = []
         for p in pred:
             ret = (p[0] > THRESHOLD).astype("int32")
+            print("direct calculation number:",p[0],"predict label:",ret)
             predicts.append(ret)
         pred = np.array(predicts)
         pred = pred.reshape((pred.shape[0]),)

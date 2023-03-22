@@ -14,7 +14,7 @@ def draw_saliency():
     print("shape of combine:",combination.shape)
 
     fe = FeatureExtractor(None)
-    fe.add_features()
+    #fe.add_features()
     features = fe.features
 
     pd_index = []
@@ -25,6 +25,8 @@ def draw_saliency():
 
     df = pd.DataFrame(combination, columns=pd_index)
     print(df.corr(method='spearman'))
+
+    df.to_csv("data_label.csv")
 
 
 draw_saliency()

@@ -9,7 +9,7 @@ from imblearn.over_sampling import SMOTE
 #import seaborn as sns
 
 class NumpyGenerator:
-    def __init__(self,windows,kind):
+    def __init__(self,windows,kind,imb=False):
         self.windows = windows
         self.df = pd.DataFrame()
         self.dataset = np.array(self.df)
@@ -18,6 +18,7 @@ class NumpyGenerator:
         self.label_smo = None
 
         self.kind = kind
+        self.imb = imb
 
     def process_windows(self):
         for wnd in self.windows:
@@ -31,7 +32,7 @@ class NumpyGenerator:
         #add the balancing part directly
         smo = SMOTE()
 
-        if len(self.dataset) > 1:
+        if len(self.dataset) > 1 and self.imb==True :
             self.dataset_smo, self.label_smo = smo.fit_resample(self.dataset,self.label)
 
     '''
