@@ -2,12 +2,14 @@
 
 from window import Window
 from packet import Packet
+import logging
+
 import copy
 
 
 class WindowManager:
     def __init__(self,packets_queue,period,swnd,move_size):
-        print("the length of packets_queue",len(packets_queue))
+        logging.info("the length of packets_queue",len(packets_queue))
 
         # the queue is all packets
         self.queue = packets_queue #the packets to be precessed
@@ -25,7 +27,7 @@ class WindowManager:
             self.queue.append(pkt)
 
     def add_packet(self, packet):
-        print("self.queue add packet")
+        logging.info("self.queue add packet")
         self.queue.append(packet)
 
     def process_packets(self):
@@ -41,25 +43,25 @@ class WindowManager:
             end_time = first_time + self.period
 
             while end_time <= last_time:
-                print("the start time of sliding window,", start_time)
-                print("the end time of sliding window,", end_time)
+                logging.info("the start time of sliding window,", start_time)
+                logging.info("the end time of sliding window,", end_time)
                 temp_packets = self.divide_packets(start_time, end_time)
                 self.process_partial_packets(temp_packets)
 
                 start_time = start_time + self.move_size
                 end_time = start_time + self.period
-                print("current number of windows,",len(self.windows))
+                logging.info("current number of windows,",len(self.windows))
 
             #handle the last remaining part
             '''
             if start_time < last_time:
                 end_time = last_time
-                print("the start time of sliding window:",start_time)
-                print("the end time of sliding window:",end_time)
+                logging.info("the start time of sliding window:",start_time)
+                logging.info("the end time of sliding window:",end_time)
                 temp_packets = self.divide_packets(start_time, end_time)
                 self.process_partial_packets(temp_packets)
 
-            print("first time:",first_time,"last time:",last_time)
+            logging.info("first time:",first_time,"last time:",last_time)
             '''
         else:
             self.process_partial_packets(self.queue)
@@ -97,31 +99,31 @@ class WindowManager:
 
         for pkt in packets:
 
-            #print("iteration is running .........")
+            #logging.info("iteration is running .........")
 
             proto,saddr,sport,daddr,dport = pkt.get_each_flow_info()
-            #print("pkt info: ",proto,saddr,sport,daddr,dport,pkt.get_serial_number())
+            #logging.info("pkt info: ",proto,saddr,sport,daddr,dport,pkt.get_serial_number())
             wnd = Window(proto,saddr,sport,daddr,dport,self.period)
-            #print("wnd successfully")
+            #logging.info("wnd successfully")
             found = False
             for window in partial_windows:
-                #print("find corresponding window")
+                #logging.info("find corresponding window")
                 if window.is_corresponding_flow(wnd):
                     found = True
-                    #print("found is true")
-                    #print("wnd",wnd)
-                    #print("window:",window)
+                    #logging.info("found is true")
+                    #logging.info("wnd",wnd)
+                    #logging.info("window:",window)
                     window.add_packet(pkt)
                     del wnd
                     break
             if not found:
                 wnd.add_packet(pkt)
-                #print("the number of window ++")
+                #logging.info("the number of window ++")
                 partial_windows.append(wnd)
 
         # then add the windows of this time interval to self.windows
-        print("the number of packets of each partial_windows",len(packets))
-        print("the number of windows of each partial_windows",len(partial_windows))
+        logging.info("the number of packets of each partial_windows",len(packets))
+        logging.info("the number of windows of each partial_windows",len(partial_windows))
         for wnd in partial_windows:
             self.windows.append(wnd)
 

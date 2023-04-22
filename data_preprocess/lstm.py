@@ -13,6 +13,7 @@ from keras.layers import Activation
 from keras.layers import Dropout
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils import shuffle
 
 TIME_STEP = 2
 THRESHOLD = 0.5
@@ -61,6 +62,8 @@ class Lstm(Algorithm):
 
         print("the info of dataset," ,dataset.shape)
         try:
+            print("shuffle is enabled for training")
+            dataset, labels = shuffle(dataset,labels)
             self.classifier[kind].fit(dataset, labels, epochs=20, validation_split=0.1, verbose=2)
             if fallback:
                 logging.info("{} {} classifier is generated with the time step 1".format(self.get_name(), kind))
@@ -105,7 +108,7 @@ class Lstm(Algorithm):
         predicts = []
         for p in pred:
             ret = (p[0] > THRESHOLD).astype("int32")
-            print("direct calculation number:",p[0],"predict label:",ret)
+            logging.info("direct calculation number:",p[0],"predict label:",ret)
             predicts.append(ret)
         pred = np.array(predicts)
         pred = pred.reshape((pred.shape[0]),)
