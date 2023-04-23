@@ -100,8 +100,8 @@ print(train_data_generator.df,train_data_generator.dataset,train_data_generator.
 
 # -----------get the training and testing data of numpy format
 # the training data, use balancing dataset and label
-data = train_data_generator.dataset_smo
-label = train_data_generator.label_smo
+data = train_data_generator.dataset
+label = train_data_generator.label
 
 np.save('r_data.npy',data)
 np.save('r_label.npy',label)
