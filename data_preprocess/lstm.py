@@ -14,7 +14,8 @@ from keras.layers import Dropout
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import shuffle
-
+import tensorflow as tf
+import sklearn as sk
 TIME_STEP = 2
 THRESHOLD = 0.5
 
@@ -58,7 +59,8 @@ class Lstm(Algorithm):
             self.classifier[kind].add(LSTM(128, return_sequences=True, activation='relu', input_shape=(TIME_STEP, int(features / TIME_STEP))))
         self.classifier[kind].add(LSTM(128, return_sequences=True, activation='relu'))
         self.classifier[kind].add(Dense(1, activation='sigmoid'))
-        self.classifier[kind].compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        metrics = ['accuracy', tf.keras.metrics.AUC(), tf.keras.metrics.Recall(), tf.keras.metrics.Precision()]
+        self.classifier[kind].compile(loss='binary_crossentropy', optimizer='adam', metrics=metrics)
 
         print("the info of dataset," ,dataset.shape)
         try:
