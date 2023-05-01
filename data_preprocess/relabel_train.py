@@ -28,6 +28,8 @@ def get_args(jupyter_args = None):
     parser.add_argument('--use_prob_embedding', required=False, action='store_true', help="")
     parser.add_argument('--sequence_length', required=False, type=int, default=10, help="")
     parser.add_argument('--rv', required=False, type=int, default=1, help="")
+    parser.add_argument('--ps_epochs', required=False, type=int, default=50, help="")
+
 
     if jupyter_args is not None:
         args = parser.parse_args(jupyter_args)
@@ -88,6 +90,7 @@ ps_infec = Lstm("ps-detector-infec")
 ps_infec.add_dataset(all_data['infection']) 
 
 # ----------------train per-step detectors----------------------
+metrics_dict = {}
 for detector in [ps_attack, ps_recon, ps_infec]:
     #train data
     train_data = detector.dataset['train']
@@ -103,12 +106,11 @@ for detector in [ps_attack, ps_recon, ps_infec]:
     print('features len is ', features_len)
     
     print_header("Training {} detector".format(detector.name))
-    detector.learning(features_len, train_examples, train_labels, kind='')
+    detector.learning(features_len, train_examples, train_labels, kind='', epochs=args.ps_epochs)
                     
     print_header("Measureing {} detector performance on test data".format(detector.name))
-    detector.detection(test_examples, test_labels, kind='')
-
-
+    _, _, metrics_dict_ps = detector.detection(test_examples, test_labels, kind='')
+    metrics_dict[detector.name] = metrics_dict_ps
 
 # -----------------seq2seq stage----------------------
 #get events
@@ -161,9 +163,13 @@ features_len = retrain_data.shape[1]
 print('features len is ', features_len)
 
 print_header("Retraining {} detector".format('infection'))
-detector.learning(features_len, retrain_data, retrain_labels, kind='')
+ps_infec.learning(features_len, retrain_data, retrain_labels, kind='', epochs=args.ps_epochs)
                 
 print_header("Measureing {} detector performance on test data".format('infection'))
-detector.detection(detector.dataset['test'][0], detector.dataset['test'][1], kind='')
+_, _, metrics_dict_new = ps_infec.detection(detector.dataset['test'][0], detector.dataset['test'][1], kind='')
 
+print_header("Per-step infection detector metrics BEFORE relabeling")
+print( metrics_dict[ps_infec.name])
 
+print_header("Per-step infection detector metrics AFTER relabeling")
+print(metrics_dict_new)
