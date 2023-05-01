@@ -24,7 +24,9 @@ class Lstm(Algorithm):
         super().__init__(name)
         #self.data = data
         #self.label = label
-
+        
+    def add_dataset(self, dataset):
+        self.dataset = dataset
     # Please implement the following functions
     # Concerning dataset, refer to the class TrainingSet
     def learning(self,features,dataset,label,kind):
