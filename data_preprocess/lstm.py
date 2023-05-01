@@ -14,6 +14,7 @@ from keras.layers import Dropout
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import shuffle
+import sklearn.metrics as metrics 
 import tensorflow as tf
 import sklearn as sk
 TIME_STEP = 2
@@ -29,7 +30,7 @@ class Lstm(Algorithm):
         self.dataset = dataset
     # Please implement the following functions
     # Concerning dataset, refer to the class TrainingSet
-    def learning(self,features,dataset,label,kind):
+    def learning(self,features,dataset,label,kind, epochs=50):
         #dataset = copy.deepcopy(windows.get_dataset(kind))
         #dataset = np.array(dataset)
         self.scale = StandardScaler().fit(dataset)
@@ -68,7 +69,7 @@ class Lstm(Algorithm):
         try:
             print("shuffle is enabled for training")
             dataset, labels = shuffle(dataset,labels)
-            self.classifier[kind].fit(dataset, labels, epochs=50, validation_split=0.1, verbose=2)
+            self.classifier[kind].fit(dataset, labels, epochs=epochs, validation_split=0.1, verbose=2)
             if fallback:
                 logging.info("{} {} classifier is generated with the time step 1".format(self.get_name(), kind))
                 print("classifier is generated with time step 1")
@@ -125,6 +126,8 @@ class Lstm(Algorithm):
             test = test.reshape((test.shape[0], 1, test.shape[1]))
 
         pred = list(self.classifier[kind].predict(test))
+        fpr, tpr, thresholds = metrics.roc_curve(label, np.array(pred).squeeze(), pos_label=1)
+        auc = metrics.auc(fpr, tpr)
 
         predicts = []
         for p in pred:
@@ -174,4 +177,14 @@ class Lstm(Algorithm):
         f1 = (2*precision*recall)/(precision+recall)
         print("accuracy:", acc,"precision:", precision, "recall:", recall, "f1:",f1)
         print("fp:",fp,",tp:",tp,",fn:",fn,",tn:",tn)
-        return pred, acc
+
+        metrics_dic = {'accuracy': acc, 
+                        'precision': precision, 
+                        "recall": recall,
+                        "f1": f1,
+                        "fp": fp,
+                        "tp": tp,
+                        "fn": fn,
+                        "tn": tn
+                        }
+        return pred, acc, metrics_dic
