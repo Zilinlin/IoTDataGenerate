@@ -32,7 +32,7 @@ def get_events(ps_attack, ps_recon, ps_infec, windows):
     events_per_detector = []
     for detector in  [ps_attack, ps_recon, ps_infec]:
         #examples_train = infection_unb_data['train'][0]
-        events = detector.predict(windows)
+        events = detector.predict(windows, kind='')
         print('proportion of infection events tagged by {} detector: '.format(detector.get_name()), np.sum(np.array(events)>0.5)/len(events))
         events_per_detector.append(events)
     benign_events = []

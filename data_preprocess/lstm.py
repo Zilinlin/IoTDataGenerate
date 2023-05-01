@@ -24,7 +24,7 @@ class Lstm(Algorithm):
         super().__init__(name)
         #self.data = data
         #self.label = label
-        
+
     def add_dataset(self, dataset):
         self.dataset = dataset
     # Please implement the following functions
@@ -89,6 +89,23 @@ class Lstm(Algorithm):
         except:
             fallback = True
             test = test.reshape((test.shape[0],1,test.shape[1]))
+
+        pred = list(self.classifier[kind].predict(test))
+        return pred
+
+
+    def predict(self, dataset, kind):
+        #logging.debug("window.get_code(): {}".format(window.get_code()))
+        #label = window.get_label(kind)
+        #test = window.get_code().copy()
+        test = np.array(dataset)
+        test = self.scale.transform(test)
+        fallback = False
+        try:
+            test = test.reshape((test.shape[0], TIME_STEP, int(test.shape[1] / TIME_STEP)))
+        except:
+            fallback = True
+            test = test.reshape((test.shape[0], 1, test.shape[1]))
 
         pred = list(self.classifier[kind].predict(test))
         return pred

@@ -109,6 +109,7 @@ for detector in [ps_attack, ps_recon, ps_infec]:
     detector.detection(test_examples, test_labels, kind='')
 
 
+
 # -----------------seq2seq stage----------------------
 #get events
 events = get_events(ps_attack, ps_recon, ps_infec, all_data['infection']['train'][0])
@@ -123,7 +124,9 @@ seq2seq.learning(events, all_data['infection']['train'][1], seq2seq_config)
 events_preds, tagged_seq2seq = seq2seq.analysis(events, all_data['infection']['train'][1], seq2seq_config)
 
 #get per-step infection detector tagged windows
-preds_ps_infec = ps_infec.predict(all_data['infection']['train'][0])
+preds_ps_infec = ps_infec.predict(all_data['infection']['train'][0], kind='')
+preds_ps_infec = np.array(preds_ps_infec).squeeze()
+print('preds ps infec shape is', preds_ps_infec.shape)
 tagged_ps_infec = []
 for idx, pred in enumerate(preds_ps_infec):
     if pred>0.5:

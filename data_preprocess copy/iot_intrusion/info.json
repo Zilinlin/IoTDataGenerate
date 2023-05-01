@@ -1,0 +1,11 @@
+{
+    "task_type": "multiclass",
+    "name": "iot_intrusion",
+    "id": "iot_intrusion",
+    "n_classes": 4,
+    "train_size": 208374,
+    "val_size": 29768,
+    "test_size": 59536,
+    "n_num_features": 8,
+    "n_cat_features": 7
+}
