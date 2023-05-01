@@ -66,7 +66,7 @@ class Lstm(Algorithm):
         try:
             print("shuffle is enabled for training")
             dataset, labels = shuffle(dataset,labels)
-            self.classifier[kind].fit(dataset, labels, epochs=20, validation_split=0.1, verbose=2)
+            self.classifier[kind].fit(dataset, labels, epochs=50, validation_split=0.1, verbose=2)
             if fallback:
                 logging.info("{} {} classifier is generated with the time step 1".format(self.get_name(), kind))
                 print("classifier is generated with time step 1")
