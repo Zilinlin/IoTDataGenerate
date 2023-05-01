@@ -11,6 +11,15 @@ from seq2seq.utils import softmax, print_header, get_events
 from seq2seq.seq2seq_attention import Seq2seqAttention
 import argparse
 import copy
+import tensorflow as tf
+import random
+
+seed = 1
+random.seed(seed)
+np.random.seed(seed)
+tf.random.set_seed(seed)
+
+
 
 def get_args(jupyter_args = None):
     parser = argparse.ArgumentParser()
@@ -94,10 +103,10 @@ for detector in [ps_attack, ps_recon, ps_infec]:
     print('features len is ', features_len)
     
     print_header("Training {} detector".format(detector.name))
-    detector.learning(features_len, train_examples, train_labels)
+    detector.learning(features_len, train_examples, train_labels, kind='')
                     
     print_header("Measureing {} detector performance on test data".format(detector.name))
-    detector.detection(test_examples, test_labels)
+    detector.detection(test_examples, test_labels, kind='')
 
 
 # -----------------seq2seq stage----------------------
@@ -149,9 +158,9 @@ features_len = retrain_data.shape[1]
 print('features len is ', features_len)
 
 print_header("Retraining {} detector".format('infection'))
-detector.learning(features_len, retrain_data, retrain_labels)
+detector.learning(features_len, retrain_data, retrain_labels, kind='')
                 
 print_header("Measureing {} detector performance on test data".format('infection'))
-detector.detection(detector.dataset['test'][0], detector.dataset['test'][1])
+detector.detection(detector.dataset['test'][0], detector.dataset['test'][1], kind='')
 
 
