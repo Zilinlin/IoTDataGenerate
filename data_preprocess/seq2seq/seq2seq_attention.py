@@ -321,7 +321,7 @@ class Seq2seqAttention(Analyzer):
         #X_in_before_fit = np.array(X_in[:, :, 0])
         #np.random.shuffle(X_in_before_fit
         #history = self.model.fit(X_in_before_fit, X_out[:, :, :1], validation_split=0.5, epochs=EPOCH, verbose=1, callbacks=[es], batch_size=100)
-        history = self.model.fit(X_in_before_fit, X_out[:, :, :1], validation_split=0.2, epochs=EPOCH, verbose=1, batch_size=100)
+        history = self.model.fit(X_in_before_fit, X_out[:, :, :1], validation_split=0.2, epochs=EPOCH, verbose=2, batch_size=100)
         #dir = 'emb{}_perm{}'.format(use_prob_embedding, permute_truncated)
         #os.makedirs(dir, exist_ok=True)
         #for metric in ['loss', 'accuracy', 'auc', 'recall', 'precision']:
