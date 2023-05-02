@@ -175,10 +175,11 @@ class Lstm(Algorithm):
         precision = (tp)/(tp+fp)
         recall = (tp)/(tp+fn)
         f1 = (2*precision*recall)/(precision+recall)
-        print("accuracy:", acc,"precision:", precision, "recall:", recall, "f1:",f1)
-        print("fp:",fp,",tp:",tp,",fn:",fn,",tn:",tn)
+        #print("auc:",auc, "accuracy:", acc,"precision:", precision, "recall:", recall, "f1:",f1)
+        #print("fp:",fp,",tp:",tp,",fn:",fn,",tn:",tn)
 
-        metrics_dic = {'accuracy': acc, 
+        metrics_dic = { 'auc': auc,
+                        'accuracy': acc, 
                         'precision': precision, 
                         "recall": recall,
                         "f1": f1,
