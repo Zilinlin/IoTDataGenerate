@@ -6,7 +6,7 @@ import numpy as np
 from label_packet import generate_label_data, label_packets
 from random_perturb import random_perturb
 from pso import PSO
-from lstm import Lstm
+from models.lstm import Lstm
 from seq2seq.utils import softmax, print_header, get_events
 from seq2seq.seq2seq_attention import Seq2seqAttention
 import argparse
@@ -38,12 +38,12 @@ def get_args(jupyter_args = None):
                         help="number of training epochs for per-step detectors")
     parser.add_argument('--relabel_rounds', required=False, type=int, default=1, 
                         help="Number of relabel rounds")
-
+    parser.add_argument('--patience', required=False, type=int, default=None,
+                        help="Patience for early stopping. Any value activates early stopping.")
     if jupyter_args is not None:
         args = parser.parse_args(jupyter_args)
     else: 
         args = parser.parse_args()
-
     return args
 
 #jupyter_args = ['--permute_truncated', '--use_prob_embedding']
@@ -114,10 +114,11 @@ for detector in [ps_attack, ps_recon, ps_infec]:
     print('features len is ', features_len)
     
     print_header("Training {} detector".format(detector.name))
-    detector.learning(features_len, train_examples, train_labels, kind='', epochs=args.ps_epochs)
+    detector.learning(features_len, train_examples, train_labels, kind='', epochs=args.ps_epochs, patience=args.patience)
                     
     print_header("Measureing {} detector performance on test data".format(detector.name))
     _, _, metrics_dict_ps = detector.detection(test_examples, test_labels, kind='')
+    print("Metrics: \n", metrics_dict_ps)
     metrics_dict[detector.name] = metrics_dict_ps
 
 
@@ -172,7 +173,6 @@ for r in range(args.relabel_rounds):
 
     # -----------------retrain per-step infection detector with new labels---------------------
     #def retrain_detector(detector, retrain_data, retrain_labels, test_data, test_labels):
-
 
     features_len = retrain_data.shape[1]
     print('features len is ', features_len)
